@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_multi_disbursement_voucher_user,multi.disbursement.voucher.user,model_multi_disbursement_voucher,base.group_user,1,1,1,1
+access_multi_disbursement_voucher_line_user,multi.disbursement.voucher.line.user,model_multi_disbursement_voucher_line,base.group_user,1,1,1,1

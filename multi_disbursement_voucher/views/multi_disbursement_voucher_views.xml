@@ -1,0 +1,122 @@
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="multi_disbursement_voucher_form_view" model="ir.ui.view">
+            <field name="name">multi.disbursement.voucher.form</field>
+            <field name="model">multi.disbursement.voucher</field>
+            <field name="arch" type="xml">
+                <form string="Multi Disbursement Voucher">
+                    <header>
+                        <button name="action_post" type="object" string="Post" class="oe_highlight" 
+                                invisible="state != 'draft'" confirm="Are you sure you want to post this voucher?"/>
+                        <button name="action_cancel" type="object" string="Cancel" 
+                                invisible="state != 'posted'" confirm="Are you sure you want to cancel this voucher?"/>
+                        <button name="action_draft" type="object" string="Set to Draft" 
+                                invisible="state != 'cancel'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date" readonly="state != 'draft'"/>
+                                <field name="journal_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                                <field name="currency_id" groups="base.group_multi_currency" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}" force_save="1"/>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="general_description" placeholder="الوصف العام للسند..." readonly="state != 'draft'"/>
+                        </group>
+                        <notebook>
+                            <page string="Disbursement Details">
+                                <field name="disbursement_line_ids" readonly="state != 'draft'">
+                                    <tree editable="bottom">
+                                        <field name="debit_account_id" options="{'no_create': True}"/>
+                                        <field name="partner_id" options="{'no_create': True}"/>
+                                        <field name="analytic_account_id" options="{'no_create': True}" groups="analytic.group_analytic_accounting"/>
+                                        <field name="description"/>
+                                        <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="tax_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                        <field name="tax_amount" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Tax"/>
+                                        <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                                        <field name="currency_id" column_invisible="True"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </page>
+                            <page string="Other Info">
+                                <group>
+                                    <field name="move_id" readonly="1" invisible="not move_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="multi_disbursement_voucher_tree_view" model="ir.ui.view">
+            <field name="name">multi.disbursement.voucher.tree</field>
+            <field name="model">multi.disbursement.voucher</field>
+            <field name="arch" type="xml">
+                <tree string="Multi Disbursement Vouchers">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" column_invisible="True"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'posted'"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="multi_disbursement_voucher_search_view" model="ir.ui.view">
+            <field name="name">multi.disbursement.voucher.search</field>
+            <field name="model">multi.disbursement.voucher</field>
+            <field name="arch" type="xml">
+                <search string="Multi Disbursement Vouchers">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="journal_id"/>
+                    <field name="total_amount"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                        <filter name="group_by_journal" string="Journal" context="{'group_by': 'journal_id'}"/>
+                        <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action Window -->
+        <record id="multi_disbursement_voucher_action" model="ir.actions.act_window">
+            <field name="name">Multi Disbursement Vouchers</field>
+            <field name="res_model">multi.disbursement.voucher</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new multi disbursement voucher
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

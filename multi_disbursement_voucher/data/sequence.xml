@@ -1,0 +1,11 @@
+<odoo>
+    <data noupdate="1">
+        <record id="seq_multi_disbursement_voucher" model="ir.sequence">
+            <field name="name">Multi Disbursement Voucher Sequence</field>
+            <field name="code">multi.disbursement.voucher</field>
+            <field name="prefix">MDV/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

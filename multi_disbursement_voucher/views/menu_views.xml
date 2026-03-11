@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <!-- Top Menu Item -->
+        <menuitem
+            id="menu_multi_disbursement_voucher_root"
+            name="Multi Disbursement Vouchers"
+            parent="account.menu_finance_receivables"
+            action="multi_disbursement_voucher_action"
+            sequence="10"/>
+
+    </data>
+</odoo>
